@@ -37,29 +37,30 @@ export const MainPage = () => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          setActiveSection(entry.target.id); 
+          setActiveSection(entry.target.id);
         }
       });
     }, observerOptions);
 
+    // Copy current refs to a local variable to avoid stale references in cleanup
+    const currentRefs = sectionRefs.current;
+
     // Observe each section
-    Object.keys(sectionRefs.current).forEach((section) => {
-      const currentSection = document.getElementById(section);
-      if (currentSection) {
-        observer.observe(currentSection);
+    Object.values(currentRefs).forEach((section) => {
+      if (section) {
+        observer.observe(section);
       }
     });
 
     return () => {
       // Cleanup the observer on component unmount
-      Object.keys(sectionRefs.current).forEach((section) => {
-        const currentSection = document.getElementById(section);
-        if (currentSection) {
-          observer.unobserve(currentSection);
+      Object.values(currentRefs).forEach((section) => {
+        if (section) {
+          observer.unobserve(section);
         }
       });
     };
-  }, []);
+  }, [sectionRefs]); // Include `sectionRefs` in the dependency array to ensure the effect runs when `sectionRefs` changes.
 
   return (
     <div className={styles.overall}>
