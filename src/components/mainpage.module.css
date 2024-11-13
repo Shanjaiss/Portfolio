@@ -1,0 +1,46 @@
+* {
+  background-color: black;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: black;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.name {
+  color: white;
+  float: left;
+  width: 30%;
+  position: sticky;
+}
+
+.navbar {
+  color: white;
+  display: inline-block;
+  margin-right: 40px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  position: sticky;
+}
+
+.navbar:hover {
+  color: orange;
+  text-decoration: underline;
+  text-decoration-color: orange;
+  text-decoration-style: solid;
+}
+
+.active {
+  color: orange;
+  text-decoration: underline;
+  text-decoration-color: orange;
+  text-decoration-style: solid;
+}

@@ -1,0 +1,82 @@
+.aboutPage {
+  margin-top: 100px;
+  display: inline-flex;
+}
+
+.about {
+  width: 80%;
+  /* margin-left: 200px; */
+}
+
+.image{
+  width: 80%;
+  margin-left: 100px;
+}
+
+.header {
+  /* position: relative; */
+  color: white;
+  font-size: 60px;
+  z-index: 1;
+  margin: 0px 0px 24px;
+  text-align: start;
+}
+
+.header::before {
+  content: 'About';
+  position: absolute;
+  /* top: -20px; 
+  left: -10px; */
+  font-size: 120px; 
+  color: rgba(255, 255, 255, 0.1); 
+  /* z-index: -1;  */
+}
+
+.text {
+  color: rgb(154, 153, 153);
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0px 0px 16px;
+  text-indent: 0;
+  text-align: left;
+}
+
+.infoContainer {
+  display: flex;
+  gap: 20px; /* Space between question and answer sections */
+}
+
+.question, .answer {
+  color: white;
+  font-size: 18px;
+  line-height: 2;
+}
+
+.question {
+  font-weight: 900;
+  text-align: left;
+  width: 30%; 
+}
+
+.answer {
+  width: 70%;
+  text-align: left;
+}
+
+.downloadBtn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: orange;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  float: left;
+}
+
+.downloadBtn:hover {
+  background-color: #d49c35;
+}
+

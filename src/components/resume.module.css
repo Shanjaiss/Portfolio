@@ -1,0 +1,88 @@
+.resume{
+  display: flex;
+  flex-direction: column;
+  margin-top: 150px;
+  align-items: center;
+}
+
+.name {
+  color: white;
+  font-size: 60px;
+  z-index: 1;
+  margin: 0px 0px 24px;
+  text-align: start;
+}
+
+.name::before {
+  content: 'Resume';
+  position: absolute;
+  left: 550px;
+  font-size: 100px; 
+  color: rgba(255, 255, 255, 0.1); 
+}
+
+.parah {
+  color: rgb(154, 153, 153);
+  text-align: left;
+  text-indent: 0;
+  max-width: 900px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 20px;
+  max-width: 900px;
+  width: 100%;
+  margin: 20px auto;
+}
+
+.card1, .card2, .card3, .card4 {
+  border: 1px solid #ccc; 
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.year {
+  font-weight: bold;
+  color: orange;
+  text-align: left;
+}
+
+.work {
+  font-size: 18px;
+  color: white;
+  margin: 5px 0;
+  text-align: left;
+}
+
+.company {
+  font-size: 16px;
+  color: #aeadad;
+  text-align: left;
+}
+
+.percentage {
+  font-size: 16px;
+  color: #aeadad;
+  text-align: left;
+}
+
+.downloadBtn {
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background-color: orange;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  width: 200px;
+}
+
+.downloadBtn:hover {
+  background-color: #d49c35;
+}
+

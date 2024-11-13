@@ -1,0 +1,78 @@
+.skills{
+  display: flex;
+  flex-direction: column;
+  margin-top: 150px;
+  align-items: center;
+  /* height: 100vh; */
+  /* position: relative;  */
+  /* text-align: center; */
+}
+
+.name {
+  color: white;
+  font-size: 60px;
+  z-index: 1;
+  margin: 0px 0px 24px;
+  text-align: start;
+}
+
+.name::before {
+  content: 'Skills';
+  position: absolute;
+  /* top: -20px;  */
+  left: 600px;
+  font-size: 100px; 
+  color: rgba(255, 255, 255, 0.1); 
+  /* z-index: -1;  */
+}
+
+.parah {
+  color: rgb(154, 153, 153);
+  text-align: center;
+  max-width: 600px;
+}
+
+.skillsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1000px;
+  margin: 20px auto;
+}
+
+.skillRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 48%;
+  margin-bottom: 20px;
+}
+
+.skillLabel {
+  font-size: 18px;
+  flex: 1;
+  color: white;
+}
+
+.skillBarContainer {
+  flex: 3;
+  background-color: #333;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.skillBar {
+  height: 100%;
+  background-color: #ffa500;
+  position: relative;
+}
+
+.skillLevel {
+  position: absolute;
+  right: 10px;
+  top: -25px;
+  font-size: 14px;
+  color: white;
+}

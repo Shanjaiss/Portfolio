@@ -1,0 +1,56 @@
+.homePage {
+  display: inline-flex;
+  align-items: center;
+  margin-left: -220px;
+}
+
+.home {
+  width: 60%;
+  color: white;
+}
+
+.image {
+  max-width: 40%;
+}
+
+.header {
+  color: orange;
+}
+
+.profile {
+  color: white;
+  font-size: 60px;
+}
+
+.name {
+  color: orange;
+}
+
+.work {
+  color: white;
+  font-size: 30px;
+}
+
+.buttonContainer {
+  display: inline-flex;
+  gap: 20px; 
+  margin-top: 20px; 
+}
+
+
+.downloadBtn {
+  margin: auto;
+  padding: 10px 20px;
+  background-color: orange;
+  color: black;
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  width: 150px;
+}
+
+.downloadBtn:hover {
+  background-color: #d49c35;
+}
