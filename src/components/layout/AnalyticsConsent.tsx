@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { disableAnalytics, enableAnalytics } from '../../analytics/analytics'
 
 const consentStorageKey = 'portfolio-analytics-consent-v1'
@@ -25,10 +26,8 @@ export default function AnalyticsConsent({
   onSettingsClosed: (restoreFocus: boolean) => void
 }) {
   const [consent, setConsent] = useState<Consent>(readConsent)
-  const panelOpen = consent === null || settingsRequested
-  const [analyticsEnabled, setAnalyticsEnabled] = useState(
-    consent === 'granted',
-  )
+  const [dismissed, setDismissed] = useState(false)
+  const panelOpen = settingsRequested || (consent === null && !dismissed)
   const [settingsError, setSettingsError] = useState('')
   const panelRef = useRef<HTMLElement>(null)
 
@@ -42,7 +41,6 @@ export default function AnalyticsConsent({
 
   useEffect(() => {
     if (!settingsRequested) return
-    panelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     panelRef.current?.focus({ preventScroll: true })
   }, [settingsRequested])
 
@@ -50,7 +48,7 @@ export default function AnalyticsConsent({
     try {
       window.localStorage.setItem(consentStorageKey, nextConsent)
       setConsent(nextConsent)
-      setAnalyticsEnabled(nextConsent === 'granted')
+      setDismissed(false)
       setSettingsError('')
       onSettingsClosed(settingsRequested)
     } catch (error) {
@@ -64,7 +62,7 @@ export default function AnalyticsConsent({
 
   if (!panelOpen) return null
 
-  return (
+  return createPortal(
     <aside
       className="analytics-consent"
       id="analytics-consent-panel"
@@ -72,57 +70,62 @@ export default function AnalyticsConsent({
       tabIndex={-1}
       aria-labelledby="analytics-consent-title"
       aria-describedby="analytics-consent-description"
+      role="region"
     >
       <div className="analytics-consent-copy">
-        <span className="section-eyebrow">PRIVACY CHOICES</span>
-        <h2 id="analytics-consent-title">Your privacy, your choice</h2>
+        <h2 id="analytics-consent-title">Optional analytics</h2>
         <p id="analytics-consent-description">
-          Optional Google Analytics 4 and Microsoft Clarity help understand
-          portfolio visits and interactions, including session recordings.
-          Contact-form fields are masked in recordings, and no form contents or
-          personal contact details are sent as analytics events. Tracking stays
-          off unless you allow it. Change your choice anytime using Privacy
-          choices in the footer.
+          Google Analytics and Microsoft Clarity measure visits and engagement.
+          They stay off unless you accept. Contact-form values are not sent, and
+          sensitive form areas are masked in recordings. You can change this
+          choice anytime in the footer.
+          {consent &&
+            ` Current choice: ${consent === 'granted' ? 'accepted' : 'rejected'}.`}
         </p>
       </div>
-      <div className="analytics-consent-controls">
-        <label className="analytics-consent-toggle">
-          <input
-            type="checkbox"
-            checked={analyticsEnabled}
-            onChange={(event) => setAnalyticsEnabled(event.target.checked)}
-          />
-          <span>Allow optional analytics</span>
-        </label>
-        <div className="analytics-consent-actions">
-          <button
-            className="button button-primary"
-            type="button"
-            onClick={() => saveConsent('granted')}
-          >
-            Allow analytics
-          </button>
-          <button
-            className="button button-secondary"
-            type="button"
-            onClick={() => saveConsent('denied')}
-          >
-            Reject optional analytics
-          </button>
+      <div className="analytics-consent-actions">
+        <button
+          className="button button-primary"
+          type="button"
+          onClick={() => saveConsent('granted')}
+        >
+          Accept
+        </button>
+        <button
+          className="button button-secondary"
+          type="button"
+          onClick={() => saveConsent('denied')}
+        >
+          Reject
+        </button>
+        {consent === null && !settingsRequested && (
           <button
             className="button button-quiet"
             type="button"
-            onClick={() => saveConsent(analyticsEnabled ? 'granted' : 'denied')}
+            onClick={() => setDismissed(true)}
           >
-            Save my choice
+            Not now
           </button>
-        </div>
+        )}
+        {settingsRequested && (
+          <button
+            className="button button-quiet"
+            type="button"
+            onClick={() => {
+              if (consent === null) setDismissed(true)
+              onSettingsClosed(true)
+            }}
+          >
+            Close
+          </button>
+        )}
         {settingsError && (
           <p className="analytics-consent-error" role="alert">
             {settingsError}
           </p>
         )}
       </div>
-    </aside>
+    </aside>,
+    document.body,
   )
 }
