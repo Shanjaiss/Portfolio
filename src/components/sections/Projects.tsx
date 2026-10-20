@@ -6,6 +6,7 @@ import SectionHeading from '../ui/SectionHeading'
 import ProjectCard from '../ui/ProjectCard'
 import ProjectDialog from './ProjectDialog'
 import ProjectFilter from '../interactive/ProjectFilter'
+import { trackAnalyticsEvent } from '../../analytics/analytics'
 type ProjectsProps = { reduceMotion: boolean | null }
 
 export default function Projects({ reduceMotion }: ProjectsProps) {
@@ -43,7 +44,13 @@ export default function Projects({ reduceMotion }: ProjectsProps) {
                   project={project}
                   index={index}
                   reduceMotion={reduceMotion}
-                  onOpen={() => setSelectedProject(project)}
+                  onOpen={() => {
+                    trackAnalyticsEvent({
+                      name: 'project_case_study_open',
+                      params: { project_id: project.id },
+                    })
+                    setSelectedProject(project)
+                  }}
                 />
               ))}
             </AnimatePresence>

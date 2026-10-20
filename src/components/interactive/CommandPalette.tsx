@@ -4,6 +4,7 @@ import { AnimatePresence, m, useReducedMotion } from 'motion/react'
 import { ArrowRight, Code2, Command } from 'lucide-react'
 import { navigationSections as sections } from '../../data/navigation'
 import useDialogAccessibility from '../../hooks/useDialogAccessibility'
+import type { NavigationSection } from '../../analytics/analytics'
 
 export default function CommandPalette({
   open,
@@ -12,7 +13,7 @@ export default function CommandPalette({
 }: {
   open: boolean
   onClose: () => void
-  navigateTo: (id: string) => void
+  navigateTo: (id: NavigationSection) => void
 }) {
   const reduceMotion = useReducedMotion()
   const [query, setQuery] = useState('')
@@ -45,7 +46,7 @@ export default function CommandPalette({
           }}
         >
           <m.div
-            className="command-palette"
+            className="command-palette clarity-mask"
             ref={paletteRef}
             role="dialog"
             aria-modal="true"

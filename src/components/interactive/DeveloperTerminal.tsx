@@ -1,18 +1,23 @@
 import { useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
 import { ArrowRight, Terminal as TerminalIcon } from 'lucide-react'
 import { profile } from '../../data/profile'
+import { trackAnalyticsEvent } from '../../analytics/analytics'
+import type { NavigationSection } from '../../analytics/analytics'
 
 export default function DeveloperTerminal({
   navigateTo,
 }: {
-  navigateTo: (id: string) => void
+  navigateTo: (id: NavigationSection) => void
 }) {
   const [input, setInput] = useState('')
   const [output, setOutput] = useState<string[]>([
     'Welcome to shanjai.dev — type “help” to explore.',
   ])
   const terminalRef = useRef<HTMLDivElement>(null)
-  const commands: Record<string, { output: string; section?: string }> = {
+  const commands: Record<
+    string,
+    { output: string; section?: NavigationSection }
+  > = {
     help: {
       output:
         'Available: about · skills · experience · projects · contact · resume',
@@ -78,7 +83,7 @@ export default function DeveloperTerminal({
             only — no shell execution.
           </p>
         </div>
-        <div className="interactive-terminal" ref={terminalRef}>
+        <div className="interactive-terminal clarity-mask" ref={terminalRef}>
           <div className="interactive-terminal-top">
             <span className="terminal-icon">
               <TerminalIcon size={15} />
@@ -102,6 +107,12 @@ export default function DeveloperTerminal({
                     <a
                       href={profile.resume}
                       download="Shanjai-Senthil-Resume.pdf"
+                      onClick={() =>
+                        trackAnalyticsEvent({
+                          name: 'resume_download_click',
+                          params: { placement: 'terminal' },
+                        })
+                      }
                     >
                       Download resume PDF
                     </a>

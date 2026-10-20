@@ -4,12 +4,13 @@ import { navigationSections } from '../../data/navigation'
 import type { Theme } from '../../types'
 import { RecruiterToggle } from '../interactive/RecruiterMode'
 import ThemeToggle from '../ui/ThemeToggle'
+import type { NavigationSection } from '../../analytics/analytics'
 
 type NavbarProps = {
   activeSection: string
   menuOpen: boolean
   onMenuToggle: () => void
-  navigateTo: (id: string) => void
+  navigateTo: (id: NavigationSection) => void
   theme: Theme
   onThemeToggle: () => void
   recruiterMode: boolean

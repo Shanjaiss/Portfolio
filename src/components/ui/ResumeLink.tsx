@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { Download, ExternalLink, Eye, X } from 'lucide-react'
 import { profile } from '../../data/profile'
 import useDialogAccessibility from '../../hooks/useDialogAccessibility'
+import { trackAnalyticsEvent } from '../../analytics/analytics'
 
 function ResumePreviewDialog({ onClose }: { onClose: () => void }) {
   const dialogRef = useRef<HTMLElement>(null)
@@ -59,6 +60,12 @@ function ResumePreviewDialog({ onClose }: { onClose: () => void }) {
               className="button button-secondary"
               href={profile.resume}
               download="Shanjai-Senthil-Resume.pdf"
+              onClick={() =>
+                trackAnalyticsEvent({
+                  name: 'resume_download_click',
+                  params: { placement: 'resume_preview' },
+                })
+              }
             >
               <Download size={15} /> Download PDF
             </a>
@@ -119,13 +126,25 @@ function ResumeLink() {
           className="button button-quiet"
           href={profile.resume}
           download="Shanjai-Senthil-Resume.pdf"
+          onClick={() =>
+            trackAnalyticsEvent({
+              name: 'resume_download_click',
+              params: { placement: 'hero' },
+            })
+          }
         >
           <Download size={15} /> Download resume
         </a>
         <button
           className="button button-quiet"
           type="button"
-          onClick={() => setPreviewOpen(true)}
+          onClick={() => {
+            trackAnalyticsEvent({
+              name: 'resume_preview_click',
+              params: { placement: 'hero' },
+            })
+            setPreviewOpen(true)
+          }}
         >
           <Eye size={15} /> Preview resume
         </button>

@@ -1,8 +1,9 @@
 import { ArrowRight, Code2, Layers3 } from 'lucide-react'
 import SectionHeading from '../ui/SectionHeading'
+import type { NavigationSection } from '../../analytics/analytics'
 
 type AboutProps = {
-  navigateTo: (id: string) => void
+  navigateTo: (id: NavigationSection) => void
 }
 
 export default function About({ navigateTo }: AboutProps) {

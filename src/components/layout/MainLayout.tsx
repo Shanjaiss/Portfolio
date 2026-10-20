@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { LazyMotion, domAnimation, useReducedMotion } from 'motion/react'
 import { profile } from '../../data/profile'
 import { navigationSections } from '../../data/navigation'
@@ -20,6 +20,11 @@ import Projects from '../sections/Projects'
 import Achievements from '../sections/Achievements'
 import Contact from '../sections/Contact'
 import DeveloperTerminal from '../interactive/DeveloperTerminal'
+import AnalyticsConsent from './AnalyticsConsent'
+import {
+  trackAnalyticsEvent,
+  type NavigationSection,
+} from '../../analytics/analytics'
 
 export default function MainLayout() {
   const reduceMotion = useReducedMotion()
@@ -29,6 +34,13 @@ export default function MainLayout() {
   const [recruiterMode, setRecruiterMode] = useState(false)
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [roleIndex, setRoleIndex] = useState(0)
+  const [privacySettingsRequested, setPrivacySettingsRequested] =
+    useState(false)
+  const privacySettingsTrigger = useRef<HTMLButtonElement>(null)
+  const closePrivacySettingsRequest = useCallback((restoreFocus: boolean) => {
+    setPrivacySettingsRequested(false)
+    if (restoreFocus) privacySettingsTrigger.current?.focus()
+  }, [])
 
   useEffect(() => {
     if (reduceMotion) return
@@ -55,7 +67,12 @@ export default function MainLayout() {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
 
-  const navigateTo = (id: string) => {
+  const navigateTo = (id: NavigationSection) => {
+    if (!document.getElementById(id)) return
+    trackAnalyticsEvent({
+      name: 'navigation',
+      params: { section: id },
+    })
     setPaletteOpen(false)
     setMenuOpen(false)
     document.getElementById(id)?.scrollIntoView({
@@ -76,7 +93,19 @@ export default function MainLayout() {
           theme={theme}
           onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           recruiterMode={recruiterMode}
-          onRecruiterToggle={() => setRecruiterMode((mode) => !mode)}
+          onRecruiterToggle={() => {
+            if (!recruiterMode) {
+              trackAnalyticsEvent({
+                name: 'recruiter_view_activate',
+                params: {},
+              })
+            }
+            setRecruiterMode(!recruiterMode)
+          }}
+        />
+        <AnalyticsConsent
+          settingsRequested={privacySettingsRequested}
+          onSettingsClosed={closePrivacySettingsRequest}
         />
         <RecruiterMode enabled={recruiterMode} />
         <main>
@@ -94,7 +123,11 @@ export default function MainLayout() {
           <DeveloperTerminal navigateTo={navigateTo} />
           <Contact />
         </main>
-        <Footer navigateTo={navigateTo} />
+        <Footer
+          navigateTo={navigateTo}
+          onPrivacySettings={() => setPrivacySettingsRequested(true)}
+          privacySettingsRef={privacySettingsTrigger}
+        />
         <QuickContactLinks />
         <CommandHint onOpen={() => setPaletteOpen(true)} />
         <CommandPalette

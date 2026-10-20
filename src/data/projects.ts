@@ -1,5 +1,8 @@
+export type ProjectId =
+  'algoninja' | 'broker-config' | 'credential-management' | 'vendor-management'
+
 export type Project = {
-  id: string
+  id: ProjectId
   name: string
   subtitle: string
   category: string[]

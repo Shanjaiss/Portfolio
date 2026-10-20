@@ -19,6 +19,14 @@ npm install
 npm run dev
 ```
 
+## Analytics and privacy consent
+
+- Copy `.env.example` to `.env.local` for local development. These public project/measurement IDs are configured with `VITE_CLARITY_PROJECT_ID` and `VITE_GA_MEASUREMENT_ID`.
+- Set both variables in the hosting provider's build environment before building for production; Vite embeds them into the client bundle.
+- Google Analytics 4 and Microsoft Clarity are initialized only after a visitor allows optional analytics. Their scripts are not loaded before consent. Visitors can reject or withdraw consent with **Privacy choices** in the footer.
+- Contact-form fields, the command palette, and the interactive terminal are masked in Clarity recordings. Analytics events contain only fixed action labels and non-personal placement/project/section values; contact-form contents are never sent.
+- GA4 page views are sent once per document after consent, with automatic page views disabled to avoid duplicates. Source attribution uses sanitized referrer origins and allowlisted UTM source, medium, and campaign parameters.
+
 ## Quality checks
 
 ```sh

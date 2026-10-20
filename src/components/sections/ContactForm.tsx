@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Send } from 'lucide-react'
 import { profile } from '../../data/profile'
+import { trackAnalyticsEvent } from '../../analytics/analytics'
 
 const contactSchema = z.object({
   name: z.string().trim().min(2, 'Please enter your name.').max(100),
@@ -31,13 +32,25 @@ export default function ContactForm() {
       `From: ${values.name}\nEmail: ${values.email}\n\n${values.message}`,
     )
     setMailtoOpened(true)
+    trackAnalyticsEvent({
+      name: 'contact_email_click',
+      params: { placement: 'contact_form' },
+    })
+    trackAnalyticsEvent({
+      name: 'contact_email_draft_open',
+      params: { placement: 'contact_form' },
+    })
     window.location.assign(
       `mailto:${profile.email}?subject=${subject}&body=${body}`,
     )
   }
 
   return (
-    <form className="contact-form" onSubmit={handleSubmit(onSubmit)} noValidate>
+    <form
+      className="contact-form clarity-mask"
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+    >
       <div className="form-heading">
         <span>CONTACT FORM</span>
         <span>

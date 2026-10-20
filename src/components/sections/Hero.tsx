@@ -2,9 +2,10 @@ import { m } from 'motion/react'
 import { ArrowDownRight, ArrowUpRight, Code2, MapPin } from 'lucide-react'
 import { profile } from '../../data/profile'
 import ResumeLink from '../ui/ResumeLink'
+import type { NavigationSection } from '../../analytics/analytics'
 
 type HeroProps = {
-  navigateTo: (id: string) => void
+  navigateTo: (id: NavigationSection) => void
   roleTitle: string
   reduceMotion: boolean | null
 }
