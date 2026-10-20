@@ -2223,8 +2223,28 @@ textarea:focus-visible {
   border: 0;
   background: #fff;
 }
-.mobile-email-quick {
-  display: none;
+.quick-contact-links {
+  position: fixed;
+  z-index: 20;
+  bottom: 18px;
+  left: 19px;
+  display: flex;
+  gap: 8px;
+}
+.quick-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 35px;
+  padding: 0 11px;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line));
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  color: var(--accent-bright);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.18);
+  font-size: 9px;
+  white-space: nowrap;
+  backdrop-filter: blur(12px);
 }
 .command-palette {
   width: min(520px, 100%);
@@ -2888,23 +2908,10 @@ textarea:focus-visible {
     bottom: 11px;
     padding: 7px 8px;
   }
-  .mobile-email-quick {
-    position: fixed;
-    z-index: 20;
+  .quick-contact-links {
     bottom: 11px;
     left: 11px;
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    min-height: 35px;
-    padding: 0 11px;
-    border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line));
-    border-radius: 7px;
-    background: color-mix(in srgb, var(--surface) 94%, transparent);
-    color: var(--accent-bright);
-    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.18);
-    font-size: 9px;
-    backdrop-filter: blur(12px);
+    gap: 6px;
   }
   .command-hint > span {
     display: none;

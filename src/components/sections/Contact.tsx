@@ -1,5 +1,12 @@
 import { useState } from 'react'
-import { ArrowUpRight, Check, Copy, Mail, MapPin } from 'lucide-react'
+import {
+  ArrowUpRight,
+  Check,
+  Copy,
+  Mail,
+  MapPin,
+  PhoneCall,
+} from 'lucide-react'
 import { profile } from '../../data/profile'
 import SectionHeading from '../ui/SectionHeading'
 import ContactForm from './ContactForm'
@@ -31,8 +38,7 @@ export default function Contact() {
               working on.
             </p>
             <p>
-              For roles and project conversations, email is the best way to
-              reach me.
+              Reach me by email or phone for roles and project conversations.
             </p>
             <a className="email-card" href={`mailto:${profile.email}`}>
               <span className="email-icon">
@@ -41,6 +47,20 @@ export default function Contact() {
               <span>
                 <small>DROP ME A LINE</small>
                 <strong>{profile.email}</strong>
+              </span>
+              <ArrowUpRight size={17} />
+            </a>
+            <a
+              className="email-card phone-card"
+              href={`tel:${profile.phone}`}
+              aria-label={`Call Shanjai at ${profile.phoneDisplay}`}
+            >
+              <span className="email-icon">
+                <PhoneCall size={18} />
+              </span>
+              <span>
+                <small>CALL ME</small>
+                <strong>{profile.phoneDisplay}</strong>
               </span>
               <ArrowUpRight size={17} />
             </a>
@@ -53,6 +73,12 @@ export default function Contact() {
               >
                 Email me <ArrowUpRight size={15} />
               </button>
+              <a
+                className="button button-secondary"
+                href={`tel:${profile.phone}`}
+              >
+                Call me <PhoneCall size={15} />
+              </a>
               <button className="button button-quiet" onClick={copyEmail}>
                 {copied ? <Check size={15} /> : <Copy size={15} />}
                 {copied ? 'Copied' : 'Copy email'}
