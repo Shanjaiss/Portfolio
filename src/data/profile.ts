@@ -5,6 +5,7 @@ export const profile: {
   location: string
   email: string
   introduction: string
+  roleTitles: string[]
   linkedin: string | null
   github: string | null
   resume: string | null
@@ -16,6 +17,13 @@ export const profile: {
   email: 'shanjaisenthil10@gmail.com',
   introduction:
     "I'm a Full Stack Developer with nearly 3 years of experience building production-ready web applications using React.js, TypeScript, Node.js, and Express.js. I specialize in modern frontend experiences, API-driven platforms, and FinTech solutions.",
+  roleTitles: [
+    'Full Stack Developer',
+    'React.js Developer',
+    'TypeScript Developer',
+    'Node.js Developer',
+    'FinTech Application Developer',
+  ],
   linkedin: null,
   github: null,
   resume: '/resume.pdf',

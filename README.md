@@ -2,6 +2,16 @@
 
 A responsive, recruiter-focused portfolio built with React, TypeScript, Vite, Tailwind CSS, Motion, and Lucide icons.
 
+## Architecture
+
+- `src/components/layout/` composes the navbar, footer, and application layout.
+- `src/components/sections/` contains page sections and their case-study/contact UI.
+- `src/components/ui/` contains shared headings, cards, theme, progress, and resume controls.
+- `src/components/interactive/` contains the command palette, terminal, recruiter toggle, and project filter.
+- `src/data/` contains typed candidate, work, project, education, achievement, navigation, and skill data.
+- `src/hooks/` contains theme persistence and scroll/active-section tracking.
+- `src/App.tsx` delegates to the main layout.
+
 ## Run locally
 
 ```sh

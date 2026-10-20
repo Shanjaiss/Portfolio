@@ -1,0 +1,94 @@
+import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, m, useReducedMotion } from 'motion/react'
+import { ArrowRight, Code2, Command } from 'lucide-react'
+import { navigationSections as sections } from '../../data/navigation'
+
+export default function CommandPalette({
+  open,
+  onClose,
+  navigateTo,
+}: {
+  open: boolean
+  onClose: () => void
+  navigateTo: (id: string) => void
+}) {
+  const reduceMotion = useReducedMotion()
+  const [query, setQuery] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    if (open) {
+      window.setTimeout(() => inputRef.current?.focus(), 20)
+    }
+  }, [open])
+  const matches = sections.filter(([, label]) =>
+    label.toLowerCase().includes(query.toLowerCase()),
+  )
+  return (
+    <AnimatePresence>
+      {open && (
+        <m.div
+          className="palette-backdrop"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.16 }}
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) onClose()
+          }}
+        >
+          <m.div
+            className="command-palette"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigate portfolio"
+            initial={{ opacity: 0, y: -12, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            transition={{ duration: reduceMotion ? 0 : 0.16 }}
+          >
+            <div className="palette-search">
+              <Command size={17} />
+              <input
+                ref={inputRef}
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Where would you like to go?"
+                aria-label="Search sections"
+              />
+              <kbd>ESC</kbd>
+            </div>
+            <div className="palette-label">JUMP TO</div>
+            {matches.length ? (
+              matches.map(([id, label], index) => (
+                <button
+                  className="palette-option"
+                  key={id}
+                  onClick={() => navigateTo(id)}
+                >
+                  <span className="palette-option-icon">
+                    {index === 0 ? (
+                      <Code2 size={16} />
+                    ) : (
+                      <ArrowRight size={16} />
+                    )}
+                  </span>
+                  {label}
+                  <span className="palette-shortcut">↵</span>
+                </button>
+              ))
+            ) : (
+              <p className="palette-empty">No sections match “{query}”.</p>
+            )}
+            <div className="palette-footer">
+              TIP{' '}
+              <span>
+                Use <kbd>⌘</kbd>
+                <kbd>K</kbd> to open anytime
+              </span>
+            </div>
+          </m.div>
+        </m.div>
+      )}
+    </AnimatePresence>
+  )
+}
