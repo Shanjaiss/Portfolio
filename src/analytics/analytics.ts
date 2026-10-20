@@ -5,11 +5,15 @@ import type { ProjectId } from '../data/projects'
 const clarityProjectId = import.meta.env.VITE_CLARITY_PROJECT_ID?.trim()
 const gaMeasurementId = import.meta.env.VITE_GA_MEASUREMENT_ID?.trim()
 const gaScriptId = 'portfolio-ga4-google-tag'
+const analyticsDiagnosticsEnabled =
+  import.meta.env.DEV &&
+  new URLSearchParams(window.location.search).get('analytics_debug') === '1'
 const consentSettings = {
   ad_storage: 'denied',
   ad_user_data: 'denied',
   ad_personalization: 'denied',
 } as const
+const analyticsCookiePattern = /^_(?:ga(?:_|=)|gid=|gat(?:_|=)|clck=|clsk=)/
 
 export type NavigationSection = (typeof navigationSections)[number][0]
 
@@ -64,6 +68,61 @@ let consentGranted = false
 let clarityInitialized = false
 let gaConfigured = false
 let pageViewSent = false
+let diagnosticsObserver: PerformanceObserver | null = null
+
+function reportAnalyticsDiagnostic(
+  event: string,
+  details: Record<string, boolean | number | string | null>,
+) {
+  if (!analyticsDiagnosticsEnabled) return
+  console.info('[analytics diagnostics]', { event, ...details })
+}
+
+function startDiagnosticsObserver() {
+  if (
+    !analyticsDiagnosticsEnabled ||
+    diagnosticsObserver ||
+    typeof PerformanceObserver === 'undefined' ||
+    !PerformanceObserver.supportedEntryTypes.includes('resource')
+  ) {
+    return
+  }
+
+  diagnosticsObserver = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      const resource = entry as PerformanceResourceTiming & {
+        responseStatus?: number
+      }
+      const endpoint = new URL(resource.name)
+      const provider = endpoint.hostname.endsWith('clarity.ms')
+        ? 'clarity'
+        : endpoint.hostname.endsWith('google-analytics.com') ||
+            endpoint.hostname.endsWith('googletagmanager.com')
+          ? 'ga4'
+          : null
+
+      if (!provider) continue
+
+      reportAnalyticsDiagnostic('request', {
+        provider,
+        endpoint: `${endpoint.origin}${endpoint.pathname}`,
+        responseStatus:
+          typeof resource.responseStatus === 'number' &&
+          resource.responseStatus > 0
+            ? resource.responseStatus
+            : null,
+        durationMs: Math.round(resource.duration),
+        transferSize: resource.transferSize,
+      })
+    }
+  })
+  diagnosticsObserver.observe({ type: 'resource', buffered: false })
+}
+
+function stopDiagnosticsObserver() {
+  diagnosticsObserver?.disconnect()
+  diagnosticsObserver = null
+}
 
 function sanitizedPageLocation() {
   const currentUrl = new URL(window.location.href)
@@ -119,6 +178,24 @@ function ensureGoogleTag() {
     script.id = gaScriptId
     script.async = true
     script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gaMeasurementId)}`
+    script.addEventListener(
+      'load',
+      () =>
+        reportAnalyticsDiagnostic('script_loaded', {
+          provider: 'ga4',
+          loaded: true,
+        }),
+      { once: true },
+    )
+    script.addEventListener(
+      'error',
+      () =>
+        reportAnalyticsDiagnostic('script_loaded', {
+          provider: 'ga4',
+          loaded: false,
+        }),
+      { once: true },
+    )
     document.head.appendChild(script)
   }
 
@@ -156,6 +233,10 @@ function ensureGoogleTag() {
       page_referrer: pageReferrer,
     })
     pageViewSent = true
+    reportAnalyticsDiagnostic('event_queued', {
+      provider: 'ga4',
+      event: 'page_view',
+    })
   }
   return true
 }
@@ -166,7 +247,9 @@ export function enableAnalytics() {
       'Analytics configuration is incomplete. Set VITE_CLARITY_PROJECT_ID and VITE_GA_MEASUREMENT_ID.',
     )
   }
-  consentGranted = true
+  const wasTrackingEnabled = consentGranted
+  consentGranted = Boolean(clarityProjectId || gaMeasurementId)
+  startDiagnosticsObserver()
   let clarityReady = false
   let ga4Ready = false
 
@@ -195,11 +278,24 @@ export function enableAnalytics() {
     console.error('Google Analytics could not be initialized.', error)
   }
 
+  if (!wasTrackingEnabled) {
+    reportAnalyticsDiagnostic('initialization', {
+      consentGranted,
+      clarityConfigured: Boolean(clarityProjectId),
+      clarityInitialized,
+      ga4Configured: Boolean(gaMeasurementId),
+      ga4CommandQueued: ga4Ready,
+      gaScriptCount: document.querySelectorAll(`#${gaScriptId}`).length,
+    })
+  }
+
   return { clarityReady, ga4Ready }
 }
 
 export function disableAnalytics() {
+  const wasTrackingEnabled = consentGranted
   consentGranted = false
+  stopDiagnosticsObserver()
 
   if (clarityInitialized) {
     try {
@@ -218,6 +314,24 @@ export function disableAnalytics() {
       analytics_storage: 'denied',
     })
   }
+
+  try {
+    for (const cookie of document.cookie.split(';')) {
+      const cookieName = cookie.trim().split('=')[0]
+      if (cookieName && analyticsCookiePattern.test(`${cookieName}=`)) {
+        document.cookie = `${cookieName}=; Max-Age=0; Path=/; SameSite=Lax`
+      }
+    }
+  } catch (error) {
+    console.error('Analytics cookies could not be cleared.', error)
+  }
+
+  if (wasTrackingEnabled) {
+    reportAnalyticsDiagnostic('tracking_disabled', {
+      clarityInitialized,
+      ga4Configured: gaConfigured,
+    })
+  }
 }
 
 export function trackAnalyticsEvent(event: AnalyticsEvent) {
@@ -226,6 +340,10 @@ export function trackAnalyticsEvent(event: AnalyticsEvent) {
   if (gaConfigured && window.gtag) {
     try {
       window.gtag('event', event.name, event.params)
+      reportAnalyticsDiagnostic('event_queued', {
+        provider: 'ga4',
+        event: event.name,
+      })
     } catch (error) {
       console.error('Google Analytics event could not be queued.', error)
     }
@@ -233,6 +351,10 @@ export function trackAnalyticsEvent(event: AnalyticsEvent) {
   if (clarityInitialized) {
     try {
       Clarity.event(event.name)
+      reportAnalyticsDiagnostic('event_queued', {
+        provider: 'clarity',
+        event: event.name,
+      })
     } catch (error) {
       console.error('Microsoft Clarity event could not be recorded.', error)
     }

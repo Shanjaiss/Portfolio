@@ -19,15 +19,17 @@ function readConsent(): Consent {
 }
 
 export default function AnalyticsConsent({
-  settingsRequested,
+  settingsRequestId,
   onSettingsClosed,
 }: {
-  settingsRequested: boolean
+  settingsRequestId: number
   onSettingsClosed: (restoreFocus: boolean) => void
 }) {
   const [consent, setConsent] = useState<Consent>(readConsent)
   const [dismissed, setDismissed] = useState(false)
-  const panelOpen = settingsRequested || (consent === null && !dismissed)
+  const [closedSettingsRequestId, setClosedSettingsRequestId] = useState(0)
+  const settingsOpen = settingsRequestId > closedSettingsRequestId
+  const panelOpen = settingsOpen || (consent === null && !dismissed)
   const [settingsError, setSettingsError] = useState('')
   const panelRef = useRef<HTMLElement>(null)
 
@@ -40,17 +42,29 @@ export default function AnalyticsConsent({
   }, [consent])
 
   useEffect(() => {
-    if (!settingsRequested) return
+    if (!settingsOpen) return
     panelRef.current?.focus({ preventScroll: true })
-  }, [settingsRequested])
+  }, [settingsOpen])
+
+  const closeSettings = () => {
+    if (consent === null) setDismissed(true)
+    setClosedSettingsRequestId(settingsRequestId)
+    onSettingsClosed(true)
+  }
 
   const saveConsent = (nextConsent: Exclude<Consent, null>) => {
     try {
       window.localStorage.setItem(consentStorageKey, nextConsent)
+      if (nextConsent === 'granted') {
+        enableAnalytics()
+      } else {
+        disableAnalytics()
+      }
       setConsent(nextConsent)
       setDismissed(false)
+      setClosedSettingsRequestId(settingsRequestId)
       setSettingsError('')
-      onSettingsClosed(settingsRequested)
+      onSettingsClosed(settingsOpen)
     } catch (error) {
       console.error('Unable to save analytics consent.', error)
       setSettingsError(
@@ -71,6 +85,12 @@ export default function AnalyticsConsent({
       aria-labelledby="analytics-consent-title"
       aria-describedby="analytics-consent-description"
       role="region"
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && settingsOpen) {
+          event.preventDefault()
+          closeSettings()
+        }
+      }}
     >
       <div className="analytics-consent-copy">
         <h2 id="analytics-consent-title">Optional analytics</h2>
@@ -98,7 +118,7 @@ export default function AnalyticsConsent({
         >
           Reject
         </button>
-        {consent === null && !settingsRequested && (
+        {consent === null && !settingsOpen && (
           <button
             className="button button-quiet"
             type="button"
@@ -107,14 +127,11 @@ export default function AnalyticsConsent({
             Not now
           </button>
         )}
-        {settingsRequested && (
+        {settingsOpen && (
           <button
             className="button button-quiet"
             type="button"
-            onClick={() => {
-              if (consent === null) setDismissed(true)
-              onSettingsClosed(true)
-            }}
+            onClick={closeSettings}
           >
             Close
           </button>

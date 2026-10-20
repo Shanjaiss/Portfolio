@@ -2209,6 +2209,8 @@ textarea:focus-visible {
   margin-left: 8px;
 }
 .footer-privacy {
+  position: relative;
+  z-index: 21;
   padding: 8px;
   border: 0;
   background: transparent;

@@ -34,11 +34,9 @@ export default function MainLayout() {
   const [recruiterMode, setRecruiterMode] = useState(false)
   const [paletteOpen, setPaletteOpen] = useState(false)
   const [roleIndex, setRoleIndex] = useState(0)
-  const [privacySettingsRequested, setPrivacySettingsRequested] =
-    useState(false)
+  const [privacySettingsRequestId, setPrivacySettingsRequestId] = useState(0)
   const privacySettingsTrigger = useRef<HTMLButtonElement>(null)
   const closePrivacySettingsRequest = useCallback((restoreFocus: boolean) => {
-    setPrivacySettingsRequested(false)
     if (restoreFocus) privacySettingsTrigger.current?.focus()
   }, [])
 
@@ -104,7 +102,7 @@ export default function MainLayout() {
           }}
         />
         <AnalyticsConsent
-          settingsRequested={privacySettingsRequested}
+          settingsRequestId={privacySettingsRequestId}
           onSettingsClosed={closePrivacySettingsRequest}
         />
         <RecruiterMode enabled={recruiterMode} />
@@ -125,7 +123,9 @@ export default function MainLayout() {
         </main>
         <Footer
           navigateTo={navigateTo}
-          onPrivacySettings={() => setPrivacySettingsRequested(true)}
+          onPrivacySettings={() =>
+            setPrivacySettingsRequestId((requestId) => requestId + 1)
+          }
           privacySettingsRef={privacySettingsTrigger}
         />
         <QuickContactLinks />

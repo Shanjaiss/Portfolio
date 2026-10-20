@@ -26,6 +26,7 @@ npm run dev
 - Google Analytics 4 and Microsoft Clarity are initialized only after a visitor allows optional analytics. Their scripts are not loaded before consent. Visitors can reject or withdraw consent with **Privacy choices** in the footer.
 - Contact-form fields, the command palette, and the interactive terminal are masked in Clarity recordings. Analytics events contain only fixed action labels and non-personal placement/project/section values; contact-form contents are never sent.
 - GA4 page views are sent once per document after consent, with automatic page views disabled to avoid duplicates. Source attribution uses sanitized referrer origins and allowlisted UTM source, medium, and campaign parameters.
+- For local-only analytics diagnostics, run the dev server and open the site with `?analytics_debug=1`. The console reports provider initialization, sanitized request endpoints/statuses when the browser exposes them, and event names without visitor data. Diagnostics are disabled in production builds and do not bypass consent.
 
 ## Quality checks
 
