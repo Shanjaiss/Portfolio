@@ -169,34 +169,11 @@ function ensureGoogleTag() {
   if (!gaMeasurementId) return false
 
   window.dataLayer ??= []
-  window.gtag ??= (...args: unknown[]) => {
-    window.dataLayer?.push(args)
-  }
 
-  if (!document.getElementById(gaScriptId)) {
-    const script = document.createElement('script')
-    script.id = gaScriptId
-    script.async = true
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gaMeasurementId)}`
-    script.addEventListener(
-      'load',
-      () =>
-        reportAnalyticsDiagnostic('script_loaded', {
-          provider: 'ga4',
-          loaded: true,
-        }),
-      { once: true },
-    )
-    script.addEventListener(
-      'error',
-      () =>
-        reportAnalyticsDiagnostic('script_loaded', {
-          provider: 'ga4',
-          loaded: false,
-        }),
-      { once: true },
-    )
-    document.head.appendChild(script)
+  window.gtag ??= function (...args: unknown[]) {
+    void args
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer?.push(arguments)
   }
 
   if (gaConfigured) {
@@ -207,37 +184,70 @@ function ensureGoogleTag() {
     return true
   }
 
+  // The caller must invoke this only after analytics consent.
   window.gtag('consent', 'default', {
-    ...consentSettings,
-    analytics_storage: 'denied',
-  })
-  window.gtag('js', new Date())
-  window.gtag('consent', 'update', {
     ...consentSettings,
     analytics_storage: 'granted',
   })
 
+  window.gtag('js', new Date())
+
   const pageLocation = sanitizedPageLocation()
   const pageReferrer = sanitizedReferrer()
+
   window.gtag('config', gaMeasurementId, {
     send_page_view: false,
     page_location: pageLocation,
     page_referrer: pageReferrer,
   })
+
   gaConfigured = true
+
+  if (!document.getElementById(gaScriptId)) {
+    const script = document.createElement('script')
+    script.id = gaScriptId
+    script.async = true
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(gaMeasurementId)}`
+
+    script.addEventListener(
+      'load',
+      () =>
+        reportAnalyticsDiagnostic('script_loaded', {
+          provider: 'ga4',
+          loaded: true,
+        }),
+      { once: true },
+    )
+
+    script.addEventListener(
+      'error',
+      () =>
+        reportAnalyticsDiagnostic('script_loaded', {
+          provider: 'ga4',
+          loaded: false,
+        }),
+      { once: true },
+    )
+
+    document.head.appendChild(script)
+  }
 
   if (!pageViewSent) {
     window.gtag('event', 'page_view', {
+      send_to: gaMeasurementId,
       page_title: document.title,
       page_location: pageLocation,
       page_referrer: pageReferrer,
     })
+
     pageViewSent = true
+
     reportAnalyticsDiagnostic('event_queued', {
       provider: 'ga4',
       event: 'page_view',
     })
   }
+
   return true
 }
 
