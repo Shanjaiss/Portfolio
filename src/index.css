@@ -2176,6 +2176,56 @@ textarea:focus-visible {
   background: rgba(4, 4, 8, 0.68);
   backdrop-filter: blur(7px);
 }
+.resume-preview-backdrop {
+  z-index: 90;
+  align-items: center;
+  padding-block: 24px;
+}
+.resume-preview-dialog {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: min(860px, 100%);
+  height: min(88vh, 920px);
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--bg-raised);
+  box-shadow: var(--shadow);
+}
+.resume-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 15px 18px;
+  border-bottom: 1px solid var(--line);
+}
+.resume-preview-header .section-eyebrow {
+  margin-bottom: 5px;
+}
+.resume-preview-header h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 550;
+}
+.resume-preview-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.resume-preview-actions .button {
+  min-height: 36px;
+}
+.resume-preview-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+.mobile-email-quick {
+  display: none;
+}
 .command-palette {
   width: min(520px, 100%);
   overflow: hidden;
@@ -2838,6 +2888,24 @@ textarea:focus-visible {
     bottom: 11px;
     padding: 7px 8px;
   }
+  .mobile-email-quick {
+    position: fixed;
+    z-index: 20;
+    bottom: 11px;
+    left: 11px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 35px;
+    padding: 0 11px;
+    border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--line));
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    color: var(--accent-bright);
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.18);
+    font-size: 9px;
+    backdrop-filter: blur(12px);
+  }
   .command-hint > span {
     display: none;
   }
@@ -2853,6 +2921,30 @@ textarea:focus-visible {
   }
   .dialog-backdrop {
     padding: 6vh 10px 20px;
+  }
+  .resume-preview-backdrop {
+    align-items: stretch;
+    padding: 10px;
+  }
+  .resume-preview-dialog {
+    width: 100%;
+    height: calc(100dvh - 20px);
+    max-height: none;
+  }
+  .resume-preview-header {
+    align-items: flex-start;
+    padding: 12px;
+  }
+  .resume-preview-header h2 {
+    font-size: 14px;
+  }
+  .resume-preview-actions {
+    gap: 6px;
+  }
+  .resume-preview-actions .button {
+    min-height: 34px;
+    padding-inline: 8px;
+    font-size: 8px;
   }
   .recruiter-banner {
     font-size: 9px;

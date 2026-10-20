@@ -7,6 +7,8 @@ import useScrollProgress from '../../hooks/useScrollProgress'
 import Navbar from './Navbar'
 import Footer from './Footer'
 import ScrollProgress from '../ui/ScrollProgress'
+import MobileEmailLink from '../ui/MobileEmailLink'
+import CommandHint from '../ui/CommandHint'
 import RecruiterMode from '../interactive/RecruiterMode'
 import CommandPalette from '../interactive/CommandPalette'
 import Hero from '../sections/Hero'
@@ -92,6 +94,8 @@ export default function MainLayout() {
           <Contact />
         </main>
         <Footer navigateTo={navigateTo} />
+        <MobileEmailLink />
+        <CommandHint onOpen={() => setPaletteOpen(true)} />
         <CommandPalette
           key={paletteOpen ? 'open' : 'closed'}
           open={paletteOpen}
