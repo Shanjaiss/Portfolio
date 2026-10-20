@@ -120,6 +120,7 @@ export const projects: Project[] = [
       'Recoil',
       'TanStack Query',
       'REST APIs',
+      'Ruby',
     ],
     features: [
       'Vendor onboarding',

@@ -32,7 +32,7 @@ npm run build
 - Update the typed profile and work history in `src/data/`.
 - The provided resume PDF is available at `public/resume.pdf`; its download link is configured in `src/data/profile.ts`.
 - Configure real social profile URLs in `src/data/profile.ts` before adding public social links.
-- A canonical URL and sitemap are intentionally omitted until the portfolio has a real domain.
+- The canonical URL and sitemap use the current public URL in `index.html`, `public/robots.txt`, and `public/sitemap.xml`; update them if the site moves to a custom domain.
 - The contact form validates locally and opens a prefilled email draft; it does not claim to send messages.
 
 Project cards describe professional contributions and use custom conceptual visuals, not employer screenshots.

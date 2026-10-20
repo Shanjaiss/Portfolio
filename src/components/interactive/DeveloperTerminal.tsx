@@ -36,8 +36,7 @@ export default function DeveloperTerminal({
     },
     contact: { output: profile.email, section: 'contact' },
     resume: {
-      output: 'Resume PDF unavailable — please request a copy by email.',
-      section: 'contact',
+      output: 'Resume PDF available:',
     },
   }
   const runCommand = (value: string) => {
@@ -97,7 +96,16 @@ export default function DeveloperTerminal({
                 key={`${line}-${index}`}
                 className={line.startsWith('›') ? 'command-line' : ''}
               >
-                {line}
+                {line === 'Resume PDF available:' && profile.resume ? (
+                  <>
+                    {line}{' '}
+                    <a href={profile.resume} download>
+                      Download resume PDF
+                    </a>
+                  </>
+                ) : (
+                  line
+                )}
               </p>
             ))}
           </div>

@@ -15,9 +15,14 @@ export default function CommandPalette({
   const reduceMotion = useReducedMotion()
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
+  const paletteRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    if (open) {
-      window.setTimeout(() => inputRef.current?.focus(), 20)
+    if (!open) return
+    const previouslyFocused = document.activeElement
+    const focusTimer = window.setTimeout(() => inputRef.current?.focus(), 20)
+    return () => {
+      window.clearTimeout(focusTimer)
+      if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus()
     }
   }, [open])
   const matches = sections.filter(([, label]) =>
@@ -38,6 +43,7 @@ export default function CommandPalette({
         >
           <m.div
             className="command-palette"
+            ref={paletteRef}
             role="dialog"
             aria-modal="true"
             aria-label="Navigate portfolio"
@@ -45,6 +51,23 @@ export default function CommandPalette({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
             transition={{ duration: reduceMotion ? 0 : 0.16 }}
+            onKeyDown={(event) => {
+              if (event.key !== 'Tab') return
+              const focusable =
+                paletteRef.current?.querySelectorAll<HTMLElement>(
+                  'button, a[href], input, [tabindex]:not([tabindex="-1"])',
+                )
+              if (!focusable?.length) return
+              const first = focusable[0]
+              const last = focusable[focusable.length - 1]
+              if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault()
+                last?.focus()
+              } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault()
+                first?.focus()
+              }
+            }}
           >
             <div className="palette-search">
               <Command size={17} />
