@@ -52,7 +52,7 @@ export default function ProjectCard({
         </div>
         <div className="project-card-footer">
           <span>View case study</span>
-          <ArrowRight size={15} />
+          <ArrowRight size={15} onClick={onOpen} />
         </div>
       </div>
     </m.article>

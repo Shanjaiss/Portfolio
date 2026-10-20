@@ -38,9 +38,7 @@ export default function Navbar({
         aria-label={`${profile.name}, home`}
       >
         <span className="brand-mark">S</span>
-        <span className="brand-name">
-          shanjai<span>.</span>
-        </span>
+        <span className="brand-name">Shanjai</span>
       </a>
       <nav
         className={`main-nav${menuOpen ? ' is-open' : ''}`}
