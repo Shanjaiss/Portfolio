@@ -17,9 +17,7 @@ export default function Footer({ navigateTo }: FooterProps) {
         }}
       >
         <span className="brand-mark">S</span>
-        <span className="brand-name">
-          shanjai<span>.</span>
-        </span>
+        <span className="brand-name">Shanjai</span>
       </a>
       <p>
         Designed and built with intent.<span> © {profile.name}</span>

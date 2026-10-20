@@ -1,6 +1,8 @@
-import { useEffect, useRef, type KeyboardEvent } from 'react'
+import { useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import type { Project } from '../../data/projects'
+import useDialogAccessibility from '../../hooks/useDialogAccessibility'
 
 function ProjectDialog({
   project,
@@ -10,17 +12,10 @@ function ProjectDialog({
   onClose: () => void
 }) {
   const dialogRef = useRef<HTMLElement>(null)
-  useEffect(() => {
-    if (!project) return
-    const previouslyFocused = document.activeElement
-    dialogRef.current?.querySelector('button')?.focus()
-    return () => {
-      if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus()
-    }
-  }, [project])
+  useDialogAccessibility(dialogRef, onClose, Boolean(project))
 
   if (!project) return null
-  return (
+  return createPortal(
     <div className="dialog-backdrop" onClick={onClose}>
       <section
         className="project-dialog"
@@ -30,25 +25,6 @@ function ProjectDialog({
         aria-modal="true"
         aria-labelledby="project-dialog-title"
         onClick={(event) => event.stopPropagation()}
-        onKeyDown={(event: KeyboardEvent<HTMLElement>) => {
-          if (event.key === 'Escape') {
-            onClose()
-            return
-          }
-          if (event.key !== 'Tab') return
-          const focusable = event.currentTarget.querySelectorAll<HTMLElement>(
-            'button, a[href], input, textarea, [tabindex]:not([tabindex="-1"])',
-          )
-          const first = focusable[0]
-          const last = focusable[focusable.length - 1]
-          if (event.shiftKey && document.activeElement === first) {
-            event.preventDefault()
-            last?.focus()
-          } else if (!event.shiftKey && document.activeElement === last) {
-            event.preventDefault()
-            first?.focus()
-          }
-        }}
       >
         <button
           className="icon-button dialog-close"
@@ -112,7 +88,8 @@ function ProjectDialog({
           owned product. Conceptual presentation only.
         </p>
       </section>
-    </div>
+    </div>,
+    document.body,
   )
 }
 

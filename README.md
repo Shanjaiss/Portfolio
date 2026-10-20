@@ -33,6 +33,7 @@ npm run build
 - The provided resume PDF is available at `public/resume.pdf`; its download link is configured in `src/data/profile.ts`.
 - Configure real social profile URLs in `src/data/profile.ts` before adding public social links.
 - The canonical URL and sitemap use the current public URL in `index.html`, `public/robots.txt`, and `public/sitemap.xml`; update them if the site moves to a custom domain.
+- The 1200×630 LinkedIn/Open Graph preview image is `public/social-preview.jpg`.
 - The contact form validates locally and opens a prefilled email draft; it does not claim to send messages.
 
 Project cards describe professional contributions and use custom conceptual visuals, not employer screenshots.

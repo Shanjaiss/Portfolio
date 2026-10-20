@@ -99,7 +99,10 @@ export default function DeveloperTerminal({
                 {line === 'Resume PDF available:' && profile.resume ? (
                   <>
                     {line}{' '}
-                    <a href={profile.resume} download>
+                    <a
+                      href={profile.resume}
+                      download="Shanjai-Senthil-Resume.pdf"
+                    >
                       Download resume PDF
                     </a>
                   </>

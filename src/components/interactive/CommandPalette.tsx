@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { AnimatePresence, m, useReducedMotion } from 'motion/react'
 import { ArrowRight, Code2, Command } from 'lucide-react'
 import { navigationSections as sections } from '../../data/navigation'
+import useDialogAccessibility from '../../hooks/useDialogAccessibility'
 
 export default function CommandPalette({
   open,
@@ -16,6 +18,7 @@ export default function CommandPalette({
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const paletteRef = useRef<HTMLDivElement>(null)
+  useDialogAccessibility(paletteRef, onClose, open)
   useEffect(() => {
     if (!open) return
     const previouslyFocused = document.activeElement
@@ -28,7 +31,7 @@ export default function CommandPalette({
   const matches = sections.filter(([, label]) =>
     label.toLowerCase().includes(query.toLowerCase()),
   )
-  return (
+  return createPortal(
     <AnimatePresence>
       {open && (
         <m.div
@@ -55,7 +58,7 @@ export default function CommandPalette({
               if (event.key !== 'Tab') return
               const focusable =
                 paletteRef.current?.querySelectorAll<HTMLElement>(
-                  'button, a[href], input, [tabindex]:not([tabindex="-1"])',
+                  'button:not([disabled]), a[href], input:not([disabled]), [tabindex]:not([tabindex="-1"])',
                 )
               if (!focusable?.length) return
               const first = focusable[0]
@@ -112,6 +115,7 @@ export default function CommandPalette({
           </m.div>
         </m.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   )
 }

@@ -43,9 +43,13 @@ export default function Hero({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.16 }}
         >
-          {roleTitle}
+          <span className="hero-designation">{profile.title}</span>
           <span className="title-divider">/</span>
-          <span className="hero-role">React · TypeScript · Node.js</span>
+          <span className="hero-role">
+            {roleTitle === profile.title
+              ? 'React · TypeScript · Node.js'
+              : roleTitle}
+          </span>
         </m.p>
         <p className="hero-headline">{profile.headline}</p>
         <p className="hero-description">{profile.introduction}</p>
