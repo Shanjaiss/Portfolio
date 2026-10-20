@@ -12,8 +12,6 @@
     sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
   color-scheme: dark;
   --bg: #0b0c10;
@@ -23,8 +21,8 @@
   --line: rgba(224, 225, 255, 0.09);
   --line-strong: rgba(224, 225, 255, 0.16);
   --text: #f1f0f6;
-  --muted: #9696a5;
-  --quiet: #858593;
+  --muted: #a9a9b6;
+  --quiet: #9999a7;
   --accent: #a48bff;
   --accent-bright: #c3b2ff;
   --cyan: #72d8d3;
@@ -560,7 +558,6 @@ textarea:focus-visible {
 }
 .line-number {
   color: var(--quiet);
-  opacity: 0.66;
 }
 .code-line b {
   color: var(--accent-bright);
