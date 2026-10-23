@@ -30,5 +30,5 @@ export const profile: {
   ],
   linkedin: null,
   github: null,
-  resume: '/resume.pdf',
+  resume: `${import.meta.env.BASE_URL}resume.pdf`,
 }
