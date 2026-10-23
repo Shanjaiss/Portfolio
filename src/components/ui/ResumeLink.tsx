@@ -143,6 +143,12 @@ function ResumeLink() {
               name: 'resume_preview_click',
               params: { placement: 'hero' },
             })
+            // Mobile browsers often render PDF iframes as a clipped first page.
+            // Use their native, full-screen PDF viewer instead.
+            if (window.matchMedia('(max-width: 767px)').matches) {
+              window.location.assign(profile.resume!)
+              return
+            }
             setPreviewOpen(true)
           }}
         >

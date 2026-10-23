@@ -7,6 +7,7 @@ export default function useDialogAccessibility<T extends HTMLElement>(
   dialogRef: RefObject<T | null>,
   onClose: () => void,
   active = true,
+  focusOnOpen = true,
 ) {
   const onCloseRef = useRef(onClose)
 
@@ -46,8 +47,10 @@ export default function useDialogAccessibility<T extends HTMLElement>(
         dialog.querySelectorAll<HTMLElement>(focusableSelector),
       ).filter((element) => element.getAttribute('aria-hidden') !== 'true')
 
-    const initialFocus = focusables()[0]
-    ;(initialFocus ?? dialog).focus()
+    if (focusOnOpen) {
+      const initialFocus = focusables()[0]
+      ;(initialFocus ?? dialog).focus()
+    }
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -92,5 +95,5 @@ export default function useDialogAccessibility<T extends HTMLElement>(
       }
       if (previousFocus instanceof HTMLElement) previousFocus.focus()
     }
-  }, [active, dialogRef])
+  }, [active, dialogRef, focusOnOpen])
 }

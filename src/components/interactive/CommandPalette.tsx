@@ -19,11 +19,17 @@ export default function CommandPalette({
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const paletteRef = useRef<HTMLDivElement>(null)
-  useDialogAccessibility(paletteRef, onClose, open)
+  useDialogAccessibility(paletteRef, onClose, open, false)
   useEffect(() => {
     if (!open) return
     const previouslyFocused = document.activeElement
-    const focusTimer = window.setTimeout(() => inputRef.current?.focus(), 20)
+    const focusTimer = window.setTimeout(() => {
+      if (window.matchMedia('(pointer: coarse)').matches) {
+        paletteRef.current?.focus({ preventScroll: true })
+      } else {
+        inputRef.current?.focus({ preventScroll: true })
+      }
+    }, 20)
     return () => {
       window.clearTimeout(focusTimer)
       if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus()
@@ -48,6 +54,7 @@ export default function CommandPalette({
           <m.div
             className="command-palette clarity-mask"
             ref={paletteRef}
+            tabIndex={-1}
             role="dialog"
             aria-modal="true"
             aria-label="Navigate portfolio"
