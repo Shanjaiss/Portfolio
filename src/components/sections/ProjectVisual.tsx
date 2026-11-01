@@ -19,8 +19,47 @@ function ProjectVisual({
           <span />
           <span />
           <span />
-          <i>CONCEPTUAL UI</i>
+          <i>{type === 'copilot' ? 'LOCAL AI RUNTIME' : 'CONCEPTUAL UI'}</i>
         </div>
+        {type === 'copilot' && (
+          <div className="copilot-ui">
+            <div className="copilot-header">
+              <span>LOCAL AI ASSISTANT</span>
+              <i>QWEN2.5-CODER · OLLAMA</i>
+            </div>
+            <div className="copilot-stats">
+              <span>
+                BACKEND
+                <strong>190 PYTEST PASS</strong>
+              </span>
+              <span>
+                FRONTEND
+                <strong>125 VITEST PASS</strong>
+              </span>
+              <span>
+                PRIVACY
+                <strong className="green-text">100% AIR-GAPPED</strong>
+              </span>
+            </div>
+            <div className="copilot-code">
+              <div>
+                <span className="copilot-keyword">def</span>{' '}
+                <span className="copilot-fn">analyze_ast</span>(code_tree):
+              </div>
+              <div className="copilot-comment">
+                # Local repository intelligence &amp; zero data leakage
+              </div>
+              <div>
+                &nbsp;&nbsp;<span className="copilot-keyword">return</span>{' '}
+                copilot.<span className="copilot-fn">evaluate_complexity</span>
+                (code_tree)
+              </div>
+              <div className="copilot-badge">
+                <Check size={9} /> 10 Modules Verified · 315 Automated Tests
+              </div>
+            </div>
+          </div>
+        )}
         {type === 'trading' && (
           <div className="trading-ui">
             <div className="visual-sidebar">
@@ -170,7 +209,9 @@ function ProjectVisual({
         )}
       </div>
       <span className="visual-caption">
-        Illustrative concept · No proprietary product imagery
+        {type === 'copilot'
+          ? 'Local-first architecture · 315 verified automated tests'
+          : 'Illustrative concept · No proprietary product imagery'}
       </span>
     </div>
   )

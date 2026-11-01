@@ -1,5 +1,6 @@
 export const projectFilters = [
   'All',
+  'AI',
   'FinTech',
   'Frontend',
   'Full Stack',

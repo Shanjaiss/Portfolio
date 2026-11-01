@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { X } from 'lucide-react'
+import { ArrowUpRight, GitBranch, X } from 'lucide-react'
 import type { Project } from '../../data/projects'
 import useDialogAccessibility from '../../hooks/useDialogAccessibility'
 
@@ -34,12 +34,28 @@ function ProjectDialog({
           <X size={19} />
         </button>
         <span className="section-eyebrow">
-          <span>CASE STUDY</span> {project.company} · {project.type}
+          <span>{project.featured ? 'FEATURED PROJECT' : 'CASE STUDY'}</span>{' '}
+          {project.company} · {project.type}
         </span>
         <h2 id="project-dialog-title">
           {project.name}
           <em>.</em>
         </h2>
+        {project.github && (
+          <div className="dialog-links-bar">
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="dialog-github-btn"
+              aria-label={`${project.name} GitHub repository (opens in new tab)`}
+            >
+              <GitBranch size={15} />
+              <span>View Source on GitHub</span>
+              <ArrowUpRight size={14} />
+            </a>
+          </div>
+        )}
         <p className="dialog-overview">{project.overview}</p>
         <div className="dialog-content-grid">
           <div>
@@ -84,8 +100,9 @@ function ProjectDialog({
           </div>
         </div>
         <p className="dialog-disclaimer">
-          Professional contribution at {project.company}; not an independently
-          owned product. Conceptual presentation only.
+          {project.github
+            ? `Independent engineering project by Shanjai Senthil. Verified local test suites and conceptual system architecture.`
+            : `Professional contribution at ${project.company}; not an independently owned product. Conceptual presentation only.`}
         </p>
       </section>
     </div>,

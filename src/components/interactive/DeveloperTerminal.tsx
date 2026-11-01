@@ -36,7 +36,7 @@ export default function DeveloperTerminal({
       section: 'experience',
     },
     projects: {
-      output: 'Browse four professional contribution case studies.',
+      output: 'Browse 5 engineering projects and contribution case studies.',
       section: 'projects',
     },
     contact: { output: profile.email, section: 'contact' },

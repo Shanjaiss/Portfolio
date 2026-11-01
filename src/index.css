@@ -1254,6 +1254,31 @@ textarea:focus-visible {
   transform: translate(2px, -2px);
   background: rgba(91, 69, 157, 0.72);
 }
+.project-featured-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border: 1px solid rgba(138, 114, 230, 0.35);
+  border-radius: 6px;
+  background: rgba(14, 16, 24, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #c4b5fd;
+  font-family: var(--mono);
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+:root[data-theme='light'] .project-featured-badge {
+  border-color: rgba(109, 40, 217, 0.25);
+  background: rgba(255, 255, 255, 0.88);
+  color: #6d28d9;
+}
 .project-visual {
   position: relative;
   display: grid;
@@ -1660,6 +1685,79 @@ textarea:focus-visible {
 .vendor-table em.pending {
   color: #ddb977;
 }
+.copilot-ui {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: calc(100% - 22px);
+  padding: 11px 14px;
+}
+.copilot-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+  color: #e0e0ec;
+  font-size: 8px;
+}
+.copilot-header i {
+  padding: 3px 6px;
+  border: 1px solid rgba(138, 114, 230, 0.35);
+  border-radius: 4px;
+  color: #bda8f8;
+  font-size: 6px;
+  font-style: normal;
+}
+.copilot-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  margin-bottom: 7px;
+}
+.copilot-stats span {
+  display: grid;
+  gap: 2px;
+  padding: 4px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  color: #858899;
+  font-size: 5px;
+}
+.copilot-stats strong {
+  color: #e0e1ed;
+  font-size: 7px;
+  font-weight: 500;
+}
+.copilot-code {
+  padding: 7px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.28);
+  font-family: var(--mono);
+  font-size: 6px;
+  line-height: 1.5;
+  color: #b6b9cb;
+}
+.copilot-keyword {
+  color: #c084fc;
+}
+.copilot-fn {
+  color: #60a5fa;
+}
+.copilot-comment {
+  color: #64748b;
+  font-style: italic;
+}
+.copilot-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 5px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: #78c996;
+  font-size: 5.5px;
+}
 .visual-caption {
   position: absolute;
   bottom: 7px;
@@ -1701,11 +1799,57 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   margin-top: 14px;
   padding-top: 12px;
   border-top: 1px solid var(--line);
   color: var(--accent-bright);
   font-size: 9px;
+}
+.project-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--accent-bright);
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+.project-action-btn:hover {
+  color: var(--text);
+  transform: translateX(2px);
+}
+.project-github-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+.project-github-btn:hover {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
 }
 .project-disclaimer {
   display: flex;
@@ -2510,6 +2654,38 @@ textarea:focus-visible {
   font-size: 12px;
   line-height: 1.8;
 }
+.dialog-links-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 16px;
+}
+.dialog-github-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+.dialog-github-btn:hover {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: translateY(-1px);
+}
 .dialog-content-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2986,6 +3162,10 @@ textarea:focus-visible {
   .project-meta {
     font-size: 6px;
   }
+  .project-card-footer {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
   .achievement-grid {
     grid-template-columns: 1fr 1fr;
     gap: 8px;
@@ -3190,6 +3370,30 @@ textarea:focus-visible {
   }
   .achievement-card {
     min-height: 130px;
+  }
+  .project-featured-badge {
+    top: 10px;
+    left: 10px;
+    padding: 3px 6px;
+    font-size: 6px;
+  }
+  .project-open {
+    top: 10px;
+    right: 10px;
+  }
+  .copilot-stats {
+    gap: 3px;
+  }
+  .copilot-stats span {
+    padding: 3px;
+    font-size: 4.5px;
+  }
+  .copilot-stats strong {
+    font-size: 6px;
+  }
+  .copilot-code {
+    font-size: 5px;
+    padding: 5px 6px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

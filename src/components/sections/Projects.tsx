@@ -27,13 +27,16 @@ export default function Projects({ reduceMotion }: ProjectsProps) {
             number="04"
           />
           <p className="section-intro">
-            Product work contributed to as part of engineering teams. These are
-            conceptual illustrations — not proprietary application screenshots.
+            Engineering projects and professional contributions. Conceptual
+            illustrations — not proprietary application screenshots.
           </p>
           <div className="projects-toolbar">
             <ProjectFilter value={filter} onChange={setFilter} />
             <span className="project-count">
-              0{filteredProjects.length} PROJECTS
+              {filteredProjects.length < 10
+                ? `0${filteredProjects.length}`
+                : filteredProjects.length}{' '}
+              PROJECTS
             </span>
           </div>
           <div className="projects-grid">
@@ -56,8 +59,8 @@ export default function Projects({ reduceMotion }: ProjectsProps) {
             </AnimatePresence>
           </div>
           <p className="project-disclaimer">
-            <span /> Professional contributions; not independently owned
-            products. No live demos or repositories are published.
+            <span /> Independent project source code available on GitHub. Client
+            and employer contributions represent professional work.
           </p>
         </div>
       </section>

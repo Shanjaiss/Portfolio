@@ -1,5 +1,5 @@
 import { m } from 'motion/react'
-import { ArrowRight, ArrowUpRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, GitBranch } from 'lucide-react'
 import type { Project } from '../../data/projects'
 import ProjectVisual from '../sections/ProjectVisual'
 
@@ -28,6 +28,11 @@ export default function ProjectCard({
         delay: reduceMotion ? 0 : index * 0.025,
       }}
     >
+      {project.featured && (
+        <span className="project-featured-badge" aria-label="Featured Project">
+          Featured
+        </span>
+      )}
       <button
         className="project-open"
         onClick={onOpen}
@@ -51,8 +56,29 @@ export default function ProjectCard({
           ))}
         </div>
         <div className="project-card-footer">
-          <span>View case study</span>
-          <ArrowRight size={15} onClick={onOpen} />
+          <button
+            type="button"
+            className="project-action-btn"
+            onClick={onOpen}
+            aria-label={`View ${project.name} case study`}
+          >
+            <span>View case study</span>
+            <ArrowRight size={14} />
+          </button>
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="project-github-btn"
+              onClick={(event) => event.stopPropagation()}
+              aria-label={`${project.name} GitHub repository (opens in new tab)`}
+            >
+              <GitBranch size={13} />
+              <span>GitHub</span>
+              <ArrowUpRight size={12} />
+            </a>
+          )}
         </div>
       </div>
     </m.article>

@@ -1,5 +1,9 @@
 export type ProjectId =
-  'algoninja' | 'broker-config' | 'credential-management' | 'vendor-management'
+  | 'ai-developer-copilot'
+  | 'algoninja'
+  | 'broker-config'
+  | 'credential-management'
+  | 'vendor-management'
 
 export type Project = {
   id: ProjectId
@@ -14,10 +18,68 @@ export type Project = {
   problem: string
   contributions: string[]
   challenges: string[]
-  visual: 'trading' | 'config' | 'credentials' | 'vendor'
+  visual: 'trading' | 'config' | 'credentials' | 'vendor' | 'copilot'
+  github?: string
+  featured?: boolean
 }
 
 export const projects: Project[] = [
+  {
+    id: 'ai-developer-copilot',
+    name: 'AI Developer Copilot',
+    subtitle: 'Local-First AI-Powered Developer Assistant',
+    category: ['AI', 'Full Stack'],
+    company: 'Independent Project',
+    type: 'Local AI Developer Platform',
+    featured: true,
+    github: 'https://github.com/Shanjaiss/ai_developer_copilot',
+    technologies: [
+      'React',
+      'TypeScript',
+      'FastAPI',
+      'Python',
+      'Ollama',
+      'Qwen2.5-Coder',
+      'TanStack Query',
+      'Vitest',
+      'Pytest',
+    ],
+    features: [
+      '12-phase full-stack development roadmap',
+      '10 integrated developer productivity modules',
+      'Local AI inference using Ollama & Qwen2.5-Coder',
+      'Read-only repository intelligence with AST analysis',
+      'Privacy-conscious source-code processing (0 cloud API calls)',
+      'Responsive application interface',
+      'Automated testing (190 backend pytest, 125 frontend vitest)',
+      'AI-powered code explanation & asymptotic complexity calculation',
+      'Security-minded code review & defect inspection',
+      'Performance optimization with side-by-side diffs',
+      'Automated unit test generation for pytest and vitest',
+      'Conversational coding assistant with bounded context',
+      'Contextual bug detection & stack trace diagnosis',
+      'Advisory code refactoring & code smell detection',
+      'Automated documentation generation (README & docstrings)',
+    ],
+    overview:
+      'Built a full-stack AI developer productivity platform using React, TypeScript, FastAPI, Python, and Ollama. The application supports AI-powered code explanation, review, optimization, unit test generation, debugging, refactoring, documentation, repository intelligence, conversational coding assistance, and developer productivity analytics.',
+    problem:
+      'Mainstream AI assistants transmit proprietary source code to cloud APIs, introducing intellectual property leakage risks, recurring token expenses, and network dependency. This project executes complete AI developer intelligence 100% locally on Apple Silicon Mac hardware with zero external API calls.',
+    contributions: [
+      'Architected a 12-phase full-stack development roadmap and delivered 10 integrated productivity modules.',
+      'Configured local LLM inference via Ollama (qwen2.5-coder:1.5b), tuned for Apple Silicon M1 within an 8 GB memory envelope.',
+      'Implemented read-only repository intelligence utilizing Python AST parsing and polyglot symbol extraction.',
+      'Enforced privacy-conscious source code processing with strict path containment and zero external data transmission.',
+      'Engineered an accessible, responsive interface using React 19, TypeScript, and TanStack Query.',
+      'Maintained verified test suites with 190 backend pytest tests and 125 frontend vitest tests (315 total passing tests).',
+    ],
+    challenges: [
+      'Operating local LLM inference under 2.5 GB memory footprint without swap pressure or token starvation on 8 GB machines.',
+      'Guaranteeing structured, schema-compliant JSON outputs from a 1.5B parameter local model via resilient parsing.',
+      'Safeguarding repository traversal with canonical path validation to prevent path traversal and arbitrary code execution.',
+    ],
+    visual: 'copilot',
+  },
   {
     id: 'algoninja',
     name: 'Algoninja',
